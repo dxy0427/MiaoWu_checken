@@ -6,9 +6,6 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import time
 
-cookies_str = 'BCW9_2132_saltkey=oxO555fM; BCW9_2132_lastvisit=1723117932; BCW9_2132_nofavfid=1; BCW9_2132_atarget=1; BCW9_2132_smile=4D1; BCW9_2132_editormode_e=1; BCW9_2132_auth=fd23N%2FFeWRI5k4Xqx6wAuTioHFZn9A3vjbjzhV8C8bKXDXoDlCPlAgLPetcxxPyz9B%2FaRAyIrG08aYGRHs9xziidXBo; BCW9_2132_lastcheckfeed=188302%7C1723182668; BCW9_2132_visitedfid=36D51D48; BCW9_2132_sid=QLQ0bg; BCW9_2132_lip=52.197.86.240%2C1723509903; BCW9_2132_st_t=188302%7C1723510051%7C9491c90474b24b9b0dd19255f4dff61e; BCW9_2132_forum_lastvisit=D_36_1723510051; BCW9_2132_ulastactivity=f8aeQI8RLRbbBP9NzNzn1Ac1H7sPn0JB2SOqBfrzNsdd%2FeSAiHzc; BCW9_2132_sendmail=1; BCW9_2132_lastact=1723510100%09home.php%09task'
-
-
 def requests_get(url, submit=False, apply=False, checken=False, page=False, referer=None, cookies=None):
     headers = {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0.0.0 Safari/537.36 Edg/126.0.0.0',
