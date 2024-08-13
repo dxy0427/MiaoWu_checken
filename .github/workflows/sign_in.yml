@@ -1,0 +1,35 @@
+name: Auto Sign In
+
+on:
+  schedule:
+    - cron: "35 7,23 * * *"
+  workflow_dispatch:
+
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2
+
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.x
+
+    - name: Install dependencies
+      run: pip install requests
+
+    - name: Run main script
+      env:
+        COOKIES: ${{ secrets.COOKIES }}
+        TUANYUAN: ${{ secrets.TUANYUAN }}
+        VIP: ${{ secrets.VIP }}
+        ANNUAL_VIP: ${{ secrets.ANNUAL_VIP }}
+        SMTP_SERVER: ${{ secrets.SMTP_SERVER }}
+        SMTP_PORT: ${{ secrets.SMTP_PORT }}
+        SMTP_USER: ${{ secrets.SMTP_USER }}
+        SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
+        FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
+        TO_EMAIL: ${{ secrets.TO_EMAIL }}
+      run: python main.py
