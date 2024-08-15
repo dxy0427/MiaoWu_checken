@@ -6,8 +6,6 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 import time
 
-cookies_str = 'BCW9_2132_saltkey=oxO555fM; BCW9_2132_lastvisit=1723117932; BCW9_2132_nofavfid=1; BCW9_2132_atarget=1; BCW9_2132_smile=4D1; BCW9_2132_editormode_e=1; BCW9_2132_auth=fd23N%2FFeWRI5k4Xqx6wAuTioHFZn9A3vjbjzhV8C8bKXDXoDlCPlAgLPetcxxPyz9B%2FaRAyIrG08aYGRHs9xziidXBo; BCW9_2132_lastcheckfeed=188302%7C1723182668; BCW9_2132_visitedfid=36D51D48; BCW9_2132_sid=QLQ0bg; BCW9_2132_lip=52.197.86.240%2C1723509903; BCW9_2132_st_t=188302%7C1723510051%7C9491c90474b24b9b0dd19255f4dff61e; BCW9_2132_forum_lastvisit=D_36_1723510051; BCW9_2132_ulastactivity=f8aeQI8RLRbbBP9NzNzn1Ac1H7sPn0JB2SOqBfrzNsdd%2FeSAiHzc; BCW9_2132_sendmail=1; BCW9_2132_lastact=1723510100%09home.php%09task'
-
 
 def requests_get(url, submit=False, apply=False, checken=False, page=False, referer=None, cookies=None):
     headers = {
@@ -37,12 +35,8 @@ def requests_get(url, submit=False, apply=False, checken=False, page=False, refe
         response = session.get(url, headers=headers)
         if apply :
             if response.status_code == 302 :
-                print("任务接取成功")
-            else:
-                print("任务接取失败")
-        else :
-            response = session.get(url, headers=headers)
-    
+                return '任务仅接取'
+
     return response.text
 
 
@@ -58,7 +52,7 @@ def get_formhash(response_text):
         exit('没有找到formhash')
 
 
-def task(task_id,isVip=False,isAnnual_Vip=False):
+def apply_task(task_id,isVip=False,isAnnual_Vip=False):
 
     if isAnnual_Vip:
         print("开始年费会员任务签到")
@@ -70,20 +64,28 @@ def task(task_id,isVip=False,isAnnual_Vip=False):
     # 任务申请地址
     task_apply_url = 'https://forum.h3dhub.com/home.php?mod=task&do=apply&id={}'.format(task_id)
 
-    # 任务提交地址
-    task_submit_url = 'https://forum.h3dhub.com/home.php?mod=task&do=draw&id={}'.format(task_id)
-
     # 申请任务
-    requests_get(task_apply_url, apply=True, cookies=cookies)
+    response = requests_get(task_apply_url, apply=True, cookies=cookies)
 
-    # 提交任务
-    response = requests_get(task_submit_url, submit=True, cookies=cookies)
+    # 正常情况下申请任务后就会自动提交，但是可能有不提交的情况
+    if response == '任务仅接取' :
+        print("开始提交任务")
+        # 提交任务
+        response = submit_task(task_id)
 
     return response
 
 
+def submit_task(task_id):
+    # 任务提交地址
+    task_submit_url = 'https://forum.h3dhub.com/home.php?mod=task&do=draw&id={}'.format(task_id)
+    # 提交任务
+    response = requests_get(task_submit_url, submit=True, cookies=cookies)
+    return response
+
+
 def result(response,isVip=False,isAnnual_Vip=False):
-    # 获取任务结果
+    
     sign_result = re.search(r'class="alert_(error|info)">\n<p>(.*?)<', response)
     
     #print(f"Sign result: {sign_result}")
@@ -119,7 +121,7 @@ def send_email(subject, body, from_email, to_email, smtp_server, smtp_port, smtp
 
 
 # 从环境变量中获取Cookies字符串
-#cookies_str = os.getenv('COOKIES')  # 论坛的Cookies字符串
+cookies_str = os.getenv('COOKIES')  # 论坛的Cookies字符串
 
 # 从环境变量中获取任务id
 isTuanYuan = os.getenv('TUANYUAN','false')
@@ -167,19 +169,22 @@ sign_submit_url = 'https://forum.h3dhub.com/home.php?mod=spacecp&ac=pm&op=checkn
 print("开始执行每日登录")
 requests_get(sign_submit_url, checken=True, cookies=cookies)
 
-# 提交任务
-response = task(task_id)
+# 申请任务
+response = apply_task(task_id)
 #print(f"Sign submit response: {response[:500]}")  # 打印前500个字符以避免过多输出
 
+# 获取任务结果
 result(response)
 
+# vip额外任务
 if isAnnual_Vip == 'true':
     task_id = '20'
-    response = task(task_id,isVip=True)
+    response = apply_task(task_id,isVip=True)
     result(response,isVip=True)
 
+#年费额外任务
 if isVip == 'true':
     task_id = '19'
-    response = task(task_id,isAnnual_Vip=True)
+    response = apply_task(task_id,isAnnual_Vip=True)
     result(response,isVip=True)
 
