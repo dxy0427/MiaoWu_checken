@@ -136,7 +136,7 @@ isAnnual_Vip = os.getenv('ANNUAL_VIP','false')
 
 # 邮件相关环境变量
 smtp_server = os.getenv('SMTP_SERVER')
-smtp_port = int(os.getenv('SMTP_PORT', 587))
+smtp_port = os.getenv('SMTP_PORT', 587)
 smtp_user = os.getenv('SMTP_USER')
 smtp_password = os.getenv('SMTP_PASSWORD')
 from_email = os.getenv('FROM_EMAIL')
