@@ -2,7 +2,7 @@ name: Auto Sign In
 
 on:
   schedule:
-    - cron: "35 7,23 * * *"
+    - cron: "30 16 * * *"
   workflow_dispatch:
 
 jobs:
@@ -32,4 +32,4 @@ jobs:
         SMTP_PASSWORD: ${{ secrets.SMTP_PASSWORD }}
         FROM_EMAIL: ${{ secrets.FROM_EMAIL }}
         TO_EMAIL: ${{ secrets.TO_EMAIL }}
-      run: python main.py
+      run: python miaowu.py
