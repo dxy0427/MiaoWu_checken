@@ -127,10 +127,10 @@ cookies_str = os.getenv('COOKIES')  # 论坛的Cookies字符串
 isTuanYuan = os.getenv('TUANYUAN','false')
 if isTuanYuan == 'true':
     task_id = '14'
-    print("团员及以上"）
+    print("团员及以上")
 else:
     task_id = '22'
-    print("非团员")
+    print("群众——会员")
 
 isVip = os.getenv('VIP','false')
 isAnnual_Vip = os.getenv('ANNUAL_VIP','false')
