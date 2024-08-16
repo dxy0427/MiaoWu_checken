@@ -122,15 +122,12 @@ def send_email(subject, body, from_email, to_email, smtp_server, smtp_port, smtp
 
 # 从环境变量中获取Cookies字符串
 cookies_str = os.getenv('COOKIES')  # 论坛的Cookies字符串
-print(cookies_str)
 # 从环境变量中获取任务id
 isTuanYuan = os.getenv('TUANYUAN','false')
 if isTuanYuan == 'true':
     task_id = '14'
-    print("团员及以上")
 else:
     task_id = '22'
-    print("群众——会员")
 
 isVip = os.getenv('VIP','false')
 isAnnual_Vip = os.getenv('ANNUAL_VIP','false')
