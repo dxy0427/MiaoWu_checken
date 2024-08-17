@@ -143,7 +143,7 @@ to_email = os.getenv('TO_EMAIL')
 
 
 # 将Cookies字符串解析为字典
-cookies = {item.split('=')[0]: item.split('=')[1] for item in cookies_str.split('; ')}
+cookies = {item.split('=')[0]: item.split('=')[1] for item in re.split(r';\s*', cookies_str)}
 
 # 任务页面地址
 task_page_url = 'https://forum.h3dhub.com/home.php?mod=task'
